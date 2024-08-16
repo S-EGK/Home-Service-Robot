@@ -71,6 +71,31 @@ int main(int argc, char** argv){
 	else
 		ROS_INFO("The robot failed to move to the drop_off location for some reason");
 
+	// Return to home
+	move_base_msgs::MoveBaseGoal return_home;
+
+	// set up the frame parameters
+	return_home.target_pose.header.frame_id = "map";
+	return_home.target_pose.header.stamp = ros::Time::now();
+
+	// Define a position and orientation of the drop_off zone for the robot to reach
+	return_home.target_pose.pose.position.x = 0.0;
+	return_home.target_pose.pose.position.y = 0.0;
+	return_home.target_pose.pose.orientation.w = 1.0;
+
+	// Send the pick_up position and orientation for the robot to reach
+	ROS_INFO("Sending base location");
+	ac.sendGoal(return_home);
+
+	// Wait an infinite time for the results
+	ac.waitForResult();
+
+	// Check if the robot reached the pick_up location
+	if(ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
+		ROS_INFO("Hooray, the robot has reached the base location");
+	else
+		ROS_INFO("The robot failed to move to the base location for some reason");
+
 
 	return 0;
 }

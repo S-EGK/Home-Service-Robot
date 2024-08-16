@@ -102,7 +102,9 @@ int main( int argc, char** argv )
 
 		// Set the marker action: ADD
 		marker.action = visualization_msgs::Marker::ADD;
-		ROS_INFO("Object ready to be picked up");
+		if(!pick_up) {
+			ROS_INFO("Object ready to be picked up");
+		}
 		
 		if(pick_up) {
 			// Set the marker action: DELETE
